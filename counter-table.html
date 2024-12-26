@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expandable Counter Tables</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 60%;
+            display: none; /* Initially hidden */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .toggle-btn {
+            margin: 20px 0;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Retro Bar Tap List</h1>
+
+    <div id="tables-container"></div>
+
+    <script>
+        // Function to generate and render a table with dynamic data
+        function renderTable(tableName, data) {
+            const tableContainer = document.getElementById('tables-container');
+            const table = document.createElement('table');
+
+            // Create a title for the table
+            const tableTitle = document.createElement('h2');
+            tableTitle.textContent = tableName;
+            tableContainer.appendChild(tableTitle);
+
+            // Create a toggle button to show/hide the table
+            const toggleButton = document.createElement('button');
+            toggleButton.textContent = `Show/Hide ${tableName}`;
+            toggleButton.classList.add('toggle-btn');
+            toggleButton.onclick = () => toggleTable(table); // Toggle table visibility
+            tableContainer.appendChild(toggleButton);
+
+            // Create table header
+            const header = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = `
+                <th>Row</th>
+                <th>Count</th>
+                <th>Increment</th>
+                <th>Decrement</th>
+            `;
+            header.appendChild(headerRow);
+            table.appendChild(header);
+
+            // Create table body and populate with rows
+            const tableBody = document.createElement('tbody');
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+
+                // Row name
+                const rowName = document.createElement('td');
+                rowName.textContent = item.row;
+                row.appendChild(rowName);
+
+                // Count
+                const countCell = document.createElement('td');
+                countCell.textContent = item.count;
+                countCell.id = `${tableName}-count-${index}`;
+                row.appendChild(countCell);
+
+                // Increment button
+                const incrementCell = document.createElement('td');
+                const incrementButton = document.createElement('button');
+                incrementButton.textContent = 'Increment';
+                incrementButton.onclick = () => incrementCount(tableName, index); // Attach event listener
+                incrementCell.appendChild(incrementButton);
+                row.appendChild(incrementCell);
+
+                // Decrement button
+                const decrementCell = document.createElement('td');
+                const decrementButton = document.createElement('button');
+                decrementButton.textContent = 'Decrement';
+                decrementButton.onclick = () => decrementCount(tableName, index); // Attach event listener
+                decrementCell.appendChild(decrementButton);
+                row.appendChild(decrementCell);
+
+                tableBody.appendChild(row);
+            });
+            table.appendChild(tableBody);
+
+            // Append the table to the container (hidden by default)
+            tableContainer.appendChild(table);
+        }
+
+        // Function to increment the count for a specific table and row
+        function incrementCount(tableName, index) {
+            const tableData = tablesData[tableName];
+            tableData[index].count += 1;
+            document.getElementById(`${tableName}-count-${index}`).textContent = tableData[index].count;
+        }
+
+        // Function to decrement the count for a specific table and row
+        function decrementCount(tableName, index) {
+            const tableData = tablesData[tableName];
+            tableData[index].count -= 1;
+            document.getElementById(`${tableName}-count-${index}`).textContent = tableData[index].count;
+        }
+
+        // Toggle function to show/hide the table
+        function toggleTable(table) {
+            if (table.style.display === 'none') {
+                table.style.display = 'table'; // Show table
+            } else {
+                table.style.display = 'none'; // Hide table
+            }
+        }
+
+        // Data for multiple tables (Each table has its own data)
+       
+
+  const tablesData = {
+            "Table Geir": [
+            { row: "Ringnes", count: 0 },
+            { row: "Pils", count: 0 },
+            { row: "Drink", count: 0 },
+            { row: "Proseco", count: 0 },
+            { row: "Wine", count: 0 },
+            ],
+            "Sal": [
+            { row: "Ringnes", count: 0 },
+            { row: "Pils", count: 0 },
+            { row: "Drink", count: 0 },
+            { row: "Proseco", count: 0 },
+            { row: "Wine", count: 0 },
+            ],
+            "Table 3": [
+            { row: "Ringnes", count: 0 },
+            { row: "Pils", count: 0 },
+            { row: "Drink", count: 0 },
+            { row: "Proseco", count: 0 },
+            { row: "Wine", count: 0 },
+            ]
+        };
+
+        // Render all tables
+        for (let tableName in tablesData) {
+            renderTable(tableName, tablesData[tableName]);
+        }
+    </script>
+</body>
+</html>
